@@ -61,6 +61,32 @@ func (r *Repository) GetRollCalls(ctx context.Context, campID uint) ([]model.Rol
 	return rollCalls, nil
 }
 
+func (r *Repository) GetLatestRollCall(ctx context.Context, campID uint) (*model.RollCall, error) {
+	rollCall, err := gorm.G[model.RollCall](r.db).
+		Preload("Reactions", nil).
+		Preload("Subjects", nil).
+		Where("camp_id = ?", campID).
+		Order("id DESC").
+		First(ctx)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// Check if camp exists to provide better error message
+			campExists, campErr := r.campExists(ctx, campID)
+			if campErr != nil {
+				return nil, campErr
+			}
+			if !campExists {
+				return nil, repository.ErrCampNotFound
+			}
+			return nil, repository.ErrRollCallNotFound
+		}
+		return nil, err
+	}
+
+	return &rollCall, nil
+}
+
 func (r *Repository) rollCallExists(ctx context.Context, rollCallID uint) (bool, error) {
 	var count int64
 

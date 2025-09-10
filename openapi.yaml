@@ -1829,6 +1829,8 @@ components:
           $ref: "#/components/schemas/PaymentResponse"
         room:
           $ref: "#/components/schemas/RoomResponse"
+        latestRollCall:
+          $ref: "#/components/schemas/RollCallResponse"
       required:
         - id
     MessageRequest:

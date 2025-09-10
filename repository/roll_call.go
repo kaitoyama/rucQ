@@ -13,4 +13,5 @@ var ErrRollCallNotFound = errors.New("roll call not found")
 type RollCallRepository interface {
 	CreateRollCall(ctx context.Context, rollCall *model.RollCall) error
 	GetRollCalls(ctx context.Context, campID uint) ([]model.RollCall, error)
+	GetLatestRollCall(ctx context.Context, campID uint) (*model.RollCall, error)
 }
