@@ -55,6 +55,21 @@ func (mr *MockRollCallRepositoryMockRecorder) CreateRollCall(ctx, rollCall any) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRollCall", reflect.TypeOf((*MockRollCallRepository)(nil).CreateRollCall), ctx, rollCall)
 }
 
+// GetLatestRollCall mocks base method.
+func (m *MockRollCallRepository) GetLatestRollCall(ctx context.Context, campID uint) (*model.RollCall, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetLatestRollCall", ctx, campID)
+	ret0, _ := ret[0].(*model.RollCall)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetLatestRollCall indicates an expected call of GetLatestRollCall.
+func (mr *MockRollCallRepositoryMockRecorder) GetLatestRollCall(ctx, campID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLatestRollCall", reflect.TypeOf((*MockRollCallRepository)(nil).GetLatestRollCall), ctx, campID)
+}
+
 // GetRollCalls mocks base method.
 func (m *MockRollCallRepository) GetRollCalls(ctx context.Context, campID uint) ([]model.RollCall, error) {
 	m.ctrl.T.Helper()

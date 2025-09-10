@@ -43,6 +43,22 @@ func (s *Server) GetDashboard(
 		Id: *params.XForwardedUser,
 	}
 
+	// Get latest roll call for the camp using cache service
+	latestRollCall, err := s.rollCallCacheService.GetLatestRollCall(e.Request().Context(), uint(campID))
+	if err != nil && !errors.Is(err, repository.ErrRollCallNotFound) {
+		return echo.NewHTTPError(http.StatusInternalServerError).
+			SetInternal(fmt.Errorf("failed to get latest roll call: %w", err))
+	}
+
+	if latestRollCall != nil {
+		apiRollCall, err := converter.Convert[api.RollCallResponse](latestRollCall)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError).
+				SetInternal(fmt.Errorf("failed to convert latest roll call: %w", err))
+		}
+		res.LatestRollCall = &apiRollCall
+	}
+
 	payment, err := s.repo.GetPaymentByUserID(
 		e.Request().Context(),
 		uint(campID),

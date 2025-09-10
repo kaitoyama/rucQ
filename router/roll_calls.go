@@ -83,6 +83,9 @@ func (s *Server) AdminPostRollCall(
 			SetInternal(fmt.Errorf("failed to create roll call: %w", err))
 	}
 
+	// Invalidate cache for this camp since we created a new roll call
+	s.rollCallCacheService.InvalidateCache(uint(campID))
+
 	res, err := converter.Convert[api.RollCallResponse](rollCall)
 
 	if err != nil {
